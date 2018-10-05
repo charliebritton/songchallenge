@@ -1,6 +1,7 @@
+const debug = require('debug')('app:apiControllers')
 const data = require('../data/data.json')
 
-exports.generate = (req, res) => {
+const generateData = (cb) => {
 
   let random = {
     key: data.musicalKeys[Math.floor(Math.random()*data.musicalKeys.length)],
@@ -10,6 +11,33 @@ exports.generate = (req, res) => {
     theme: data.themes[Math.floor(Math.random()*data.themes.length)]
   }
 
-  res.send(JSON.stringify(random));
+  cb(null, random)
 
 }
+
+exports.generate = generateData
+
+const generate = (req, res) => {
+
+  generateData((err, data) => {
+    debug(`Rate limit info: ${JSON.stringify(req.rateLimit)}`)
+    debug(`Sending data: ${JSON.stringify(data)}`)
+    res.json(data);
+
+  })
+
+}
+
+exports.generate = generate
+
+const generateSingle = (req, res) => {
+
+  generateData((err, data) => {
+
+    console.log(req.params.data)
+    res.send(data[req.params.data]);
+
+  });
+}
+
+exports.generateSingle = generateSingle
