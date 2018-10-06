@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4004;
 const debug = require('debug')('app:server')
 
 const routes = require('./api/routes/appRoutes');
-routes(app); 
+routes(app);
 
 app.listen(port);
 debug(`Server running on port ${port}`);
