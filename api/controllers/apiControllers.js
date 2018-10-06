@@ -20,6 +20,7 @@ exports.generate = generateData
 const generate = (req, res) => {
 
   generateData((err, data) => {
+    debug(`API request from: ${req.ip}`)
     debug(`Rate limit info: ${JSON.stringify(req.rateLimit)}`)
     debug(`Sending data: ${JSON.stringify(data)}`)
     res.json(data);

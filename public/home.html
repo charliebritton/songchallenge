@@ -14,7 +14,9 @@
     height: 60px;
     line-height: 60px;
     background-color: #f5f5f5;
-}</style>
+}
+.card-title{user-select: none}
+</style>
     <title>SongChallenge</title>
   </head>
   <body>
@@ -70,7 +72,6 @@
         </div>
         </div>
       </div>
-    </div>
 
     <footer class="footer">
       <div class="container">
@@ -86,25 +87,39 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script>
 
-     function updateItem(id, text) {
-       if(typeof text == "string") {
-         document.getElementById(id).innerHTML = text
-       }
-       if(typeof text == "object") {
-         document.getElementById('key').innerHTML = text[0]
-         document.getElementById('keyRelative').innerHTML = text[1]
-       }
+      function updateItem(id, text) {
 
-     }
+        // Check for string or array
+        if(typeof text == "string") {
+          document.getElementById(id).innerHTML = text
+        }
 
-     function updateAll(text) {
+        if(typeof text == "object") {
+          document.getElementById('key').innerHTML = text[0]
+          document.getElementById('keyRelative').innerHTML = text[1]
+        }
 
-       $.getJSON( "api/generate", function( data ) {
-         $.each( data, function( key, val ) {
-           updateItem(key, val)
-         });
-     })
-   };
+      }
+
+      function requestApi(cb) {
+
+        $.getJSON( "api/generate", (data) => {
+          cb(null, data)
+        });
+
+      }
+
+      function updateAll(text) {
+
+        requestApi((err, data) => {
+
+          $.each(data, (key, value) => {
+
+            updateItem(key, value)
+
+          });
+        });
+      }
 
       $(document).ready(() => {
         updateAll()
@@ -113,6 +128,17 @@
       $(document).on("keydown", (e) => {
         e.keyCode == 32 ? updateAll() : null;
       });
+
+      $(".card-title").click((e) => {
+
+        let id = e.target.id
+        requestApi((err, data) => {
+
+          updateItem(id, data[id])
+
+        })
+
+      })
 
     </script>
 

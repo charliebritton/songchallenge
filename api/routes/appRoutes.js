@@ -1,5 +1,6 @@
 const debug = require('debug')('app:routing')
 const rateLimit = require("express-rate-limit");
+const favicon = require('express-favicon');
 
 module.exports = (app) => {
 
@@ -10,7 +11,7 @@ module.exports = (app) => {
   // Rate limits
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
+    max: 1000, // limit each IP to 100 requests per windowMs
     message: {
       error: "Rate limit exceeded."
     }
@@ -18,6 +19,7 @@ module.exports = (app) => {
 
   app.use(limiter);
 
+  app.use(favicon("./public/favicon.ico"));
 
   // Frontend Stuff
   app.route('/')

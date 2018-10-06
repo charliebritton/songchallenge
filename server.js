@@ -4,7 +4,7 @@ const port = 4000;
 const debug = require('debug')('app:server')
 
 const routes = require('./api/routes/appRoutes');
-routes(app);
+routes(app); 
 
 app.listen(port);
 debug(`Server running on port ${port}`);
